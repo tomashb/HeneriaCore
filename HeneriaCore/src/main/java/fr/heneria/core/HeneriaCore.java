@@ -18,6 +18,11 @@ public class HeneriaCore extends JavaPlugin {
         // Load config
         saveDefaultConfig();
 
+        boolean debug = getConfig().getBoolean("debug");
+        if (debug) {
+            getLogger().info("[DEBUG] Mode Debug ACTIF.");
+        }
+
         // Initialize Database
         this.databaseManager = new DatabaseManager(this);
         this.databaseManager.initialize();

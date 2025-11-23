@@ -35,6 +35,10 @@ public class PlayerDataManager {
      * @return The loaded or created HeneriaPlayer
      */
     public HeneriaPlayer loadPlayer(UUID uuid, String username) {
+        if (plugin.getConfig().getBoolean("debug")) {
+            plugin.getLogger().info("[DEBUG] Chargement des données pour UUID: " + uuid);
+        }
+
         HeneriaPlayer player = null;
         String query = "SELECT * FROM heneria_players WHERE uuid = ?";
 
@@ -50,6 +54,14 @@ public class PlayerDataManager {
                     Timestamp lastJoin = resultSet.getTimestamp("last_join");
 
                     player = new HeneriaPlayer(uuid, username, coins, rankPrefix, firstJoin, lastJoin);
+
+                    if (plugin.getConfig().getBoolean("debug")) {
+                        plugin.getLogger().info("[DEBUG] Résultat SQL Load: Coins trouvés = " + coins);
+                    }
+                } else {
+                     if (plugin.getConfig().getBoolean("debug")) {
+                        plugin.getLogger().info("[DEBUG] Résultat SQL Load: Aucun résultat (Nouveau joueur).");
+                    }
                 }
             }
 
@@ -60,8 +72,7 @@ public class PlayerDataManager {
 
         if (player == null) {
             player = new HeneriaPlayer(uuid, username);
-            // We can choose to insert it now or save on quit.
-            // Saving it now ensures the record exists.
+            // Insert immediately as requested
             savePlayerToDatabase(player);
         } else {
             // Update username if changed (and last join time eventually)
@@ -83,9 +94,13 @@ public class PlayerDataManager {
      * @param player The player to save
      */
     public void savePlayerToDatabase(HeneriaPlayer player) {
+        if (plugin.getConfig().getBoolean("debug")) {
+             plugin.getLogger().info("[DEBUG] Sauvegarde lancée pour UUID: " + player.getUuid() + " Coins = " + player.getCoins());
+        }
+
         String query = "INSERT INTO heneria_players (uuid, username, coins, rank_prefix, first_join, last_join) " +
                 "VALUES (?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE username=?, coins=?, rank_prefix=?, last_join=?";
+                "ON DUPLICATE KEY UPDATE username=VALUES(username), coins=VALUES(coins), rank_prefix=VALUES(rank_prefix), last_join=VALUES(last_join)";
 
         try (Connection connection = databaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -97,13 +112,14 @@ public class PlayerDataManager {
             statement.setTimestamp(5, player.getFirstJoin());
             statement.setTimestamp(6, player.getLastJoin());
 
-            // Update part
-            statement.setString(7, player.getUsername());
-            statement.setInt(8, player.getCoins());
-            statement.setString(9, player.getRankPrefix());
-            statement.setTimestamp(10, player.getLastJoin());
+            // No need to set update parameters manually with VALUES() syntax
+            // The VALUES(col_name) function refers to the value that would have been inserted
 
             statement.executeUpdate();
+
+            if (plugin.getConfig().getBoolean("debug")) {
+                plugin.getLogger().info("[DEBUG] Sauvegarde terminée.");
+            }
 
         } catch (SQLException e) {
             plugin.getLogger().severe("Failed to save player data for " + player.getUsername() + ": " + e.getMessage());

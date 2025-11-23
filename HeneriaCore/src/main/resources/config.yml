@@ -5,3 +5,6 @@ database:
   username: "u1_OwcFPkdQsK"
   password: "WoyTOS62p=VIAoqQ!MHcea=Y"
   pool_size: 10
+
+# Mode Debug pour afficher les logs SQL dans la console
+debug: false
