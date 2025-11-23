@@ -1,7 +1,7 @@
 database:
-  host: "localhost"
+  host: "172.19.0.1"
   port: 3306
-  database: "heneria_db"
-  username: "root"
-  password: "password"
+  database: "s1_s1_velocity"
+  username: "u1_OwcFPkdQsK"
+  password: "WoyTOS62p=VIAoqQ!MHcea=Y"
   pool_size: 10
