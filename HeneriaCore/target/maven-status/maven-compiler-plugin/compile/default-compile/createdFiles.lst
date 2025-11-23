@@ -1,0 +1,7 @@
+fr/heneria/core/HeneriaCore.class
+fr/heneria/core/manager/PlayerDataManager.class
+fr/heneria/core/database/DatabaseManager.class
+fr/heneria/core/command/CoinsCommand.class
+fr/heneria/core/model/HeneriaPlayer.class
+fr/heneria/core/listener/PlayerListener.class
+fr/heneria/core/manager/EconomyManager.class

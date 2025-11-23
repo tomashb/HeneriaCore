@@ -1,0 +1,7 @@
+/app/HeneriaCore/src/main/java/fr/heneria/core/HeneriaCore.java
+/app/HeneriaCore/src/main/java/fr/heneria/core/command/CoinsCommand.java
+/app/HeneriaCore/src/main/java/fr/heneria/core/database/DatabaseManager.java
+/app/HeneriaCore/src/main/java/fr/heneria/core/listener/PlayerListener.java
+/app/HeneriaCore/src/main/java/fr/heneria/core/manager/EconomyManager.java
+/app/HeneriaCore/src/main/java/fr/heneria/core/manager/PlayerDataManager.java
+/app/HeneriaCore/src/main/java/fr/heneria/core/model/HeneriaPlayer.java
