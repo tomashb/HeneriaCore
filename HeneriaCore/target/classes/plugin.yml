@@ -1,0 +1,12 @@
+name: HeneriaCore
+version: '1.0-SNAPSHOT'
+main: fr.heneria.core.HeneriaCore
+api-version: '1.21'
+author: Jules
+description: Plugin Noyau pour le réseau Heneria.
+
+commands:
+  coins:
+    description: Gestion des coins.
+    usage: /coins <give|set|see> <joueur> [montant]
+    permission: heneria.admin.coins

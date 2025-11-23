@@ -1,0 +1,7 @@
+database:
+  host: "localhost"
+  port: 3306
+  database: "heneria_db"
+  username: "root"
+  password: "password"
+  pool_size: 10
