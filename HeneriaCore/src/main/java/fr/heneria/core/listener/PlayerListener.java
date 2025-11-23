@@ -24,6 +24,7 @@ public class PlayerListener implements Listener {
 
         // This event is already async, so we can block here safely.
         // It's the perfect place to load data before the player actually joins.
+        // Logs are handled inside loadPlayer.
         playerDataManager.loadPlayer(uuid, username);
     }
 

@@ -5,3 +5,6 @@ database:
   username: "root"
   password: "password"
   pool_size: 10
+
+# Mode Debug pour afficher les logs SQL dans la console
+debug: false

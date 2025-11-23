@@ -43,33 +43,37 @@ public class DatabaseManager {
 
         this.dataSource = new HikariDataSource(hikariConfig);
 
+        if (plugin.getConfig().getBoolean("debug")) {
+            plugin.getLogger().info("[DEBUG] Connexion SQL établie avec succès (Pool créé).");
+        }
+
         initTables();
     }
 
     private void initTables() {
-        // Run async to avoid blocking main thread if DB is slow, although initialize is usually called in onEnable
-        // Ideally we should block startup if DB is critical, but the prompt emphasizes async.
-        // However, we need the table to exist before players join.
-        // We will execute this synchronously here to ensure tables exist,
-        // OR rely on the fact that players join later.
-        // Given prompt constraints ("Tout appel SQL doit être fait en Asynchrone"),
-        // I will use runAsync but log any errors.
-
+        // Run async to avoid blocking main thread if DB is slow
         CompletableFuture.runAsync(() -> {
             try (Connection connection = getConnection();
                  Statement statement = connection.createStatement()) {
 
+                // Align with the prompt requirements
                 String sql = "CREATE TABLE IF NOT EXISTS heneria_players (" +
-                        "uuid VARCHAR(36) PRIMARY KEY, " +
+                        "uuid VARCHAR(36) NOT NULL, " +
                         "username VARCHAR(16), " +
                         "coins INT DEFAULT 0, " +
                         "rank_prefix VARCHAR(64), " +
                         "first_join TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-                        "last_join TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                        "last_join TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                        "PRIMARY KEY (uuid)" +
                         ");";
 
                 statement.executeUpdate(sql);
-                plugin.getLogger().info("Database tables initialized successfully.");
+
+                if (plugin.getConfig().getBoolean("debug")) {
+                    plugin.getLogger().info("[DEBUG] Table 'heneria_players' vérifiée/créée.");
+                } else {
+                    plugin.getLogger().info("Database tables initialized successfully.");
+                }
 
             } catch (SQLException e) {
                 plugin.getLogger().severe("Could not initialize database tables: " + e.getMessage());
